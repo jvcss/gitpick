@@ -67,7 +67,7 @@ for files in diffs[selected_branch]:
                 for line in diffs[selected_branch][files]:
                     print(f"{patch}")
                     patch += f"{line}\n"
-                with open(f"patches/{selected_branch}.patch", 'w') as file:
+                with open(f"patches/{selected_branch}.patch", 'w', encoding="utf-8") as file:
                     file.write(patch)
                 st.rerun()
             else:
