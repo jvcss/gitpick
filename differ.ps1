@@ -1,11 +1,9 @@
 param(
-    [string]$RepoURL = "https://github.com/jvcss/jvcss.git",
+    [string]$RepoURL = "https://github.com/jvcss/gitpick.git",
     [string]$DiretorioDestino = "source"
 )
 
 $ignore = @(
-    ".fvm/flutter_sdk",
-    ".fvm/fvm_config.json",
     ".gitignore"
 )
 #🔥
@@ -75,7 +73,7 @@ function Save-Diffs {
         [string]$File,
         [string]$Branch,
         [string]$BaseA = "main",
-        [string]$OutputFolder = "C:\work\expert\GitAutomations"
+        [string]$OutputFolder = "C:\Users\vitim\Documents\sources\javascript\apps\gitpick"
     )
     #should save in the diffs.json the new object with its new content property
     $outputFile = "$($OutputFolder)\diffs.json"
