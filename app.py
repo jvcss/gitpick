@@ -13,6 +13,7 @@ def sha256_hash(input_value): return hashlib.sha256(
 
 
 def clicked(col_cont):
+    print(col_cont)
     if (col_cont in st.session_state['clicked_buttons']):
         return ":green[Add Patch]"
     else:
@@ -45,30 +46,32 @@ for files in diffs[selected_branch]:
             for line in diffs[selected_branch][files]:
                 if (line.startswith('-')):
                     st.markdown(
-                        f":red[{line}]", help="linhas que começam com --- mostram o que existe na branch (A) e não na branch (B).")
+                        f":red[{line}]", help="linhas que comecam com --- mostram o que existe na branch (A) e nao na branch (B).")
                 elif (line.startswith('+')):
                     st.markdown(
-                        f":green[{line}]", help="linhas que começam com +++ mostram o que existe na branch (B) e não na branch (A).")
+                        f":green[{line}]", help="linhas que comecam com +++ mostram o que existe na branch (B) e nao na branch (A).")
                 elif (line.startswith('@')):
                     st.markdown(
-                        f":blue[{line}]", help="linhas que começam com @@ são cabeçalhos de contexto para mostrar onde as mudanças ocorrem no arquivo")
+                        f":blue[{line}]", help="linhas que comecam com @@ sao cabecalhos de contexto para mostrar onde as mudancas ocorrem no arquivo")
                 else:
                     st.markdown(f"{line}")
 
     with col_bring:
         add_patch = st.button(label=clicked(file_hash), key=f"{file_hash}")
-        patch = ""
+        
         if (add_patch):
             if f"{file_hash}" not in st.session_state['clicked_buttons']:
+                patch = ""
                 st.toast(f"Patch criado para {selected_branch}")
                 st.session_state['clicked_buttons'].append(f"{file_hash}")
                 for line in diffs[selected_branch][files]:
+                    print(f"{patch}")
                     patch += f"{line}\n"
-                with open(f"patches/{selected_branch}.patch", 'a') as file:
+                with open(f"patches/{selected_branch}.patch", 'w') as file:
                     file.write(patch)
                 st.rerun()
             else:
-                st.toast(f"Patch já existe {selected_branch}")
+                st.toast(f"Patch ja existe {selected_branch}")
 
     with col_remove:
         remove_patch = st.button(
