@@ -64,7 +64,7 @@ for files in diffs[selected_branch]:
                 st.session_state['clicked_buttons'].append(f"{file_hash}")
                 for line in diffs[selected_branch][files]:
                     patch += f"{line}\n"
-                with open(f"patches\{selected_branch}.patch", 'a') as file:
+                with open(f"patches/{selected_branch}.patch", 'a') as file:
                     file.write(patch)
                 st.rerun()
             else:
