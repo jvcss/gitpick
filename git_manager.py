@@ -5,15 +5,17 @@
 
 # listar arquivos para ignorar
 
-# listar as diferencas entre a..b por arquivo
+# listar nome de arquivos contendo diferencas a..b
+
+# listar as diferencas entre a..b por arquivo e salvar em patch
 
 # salvo no banco o path de cada arquivo com nome sendo seu hash, identificando o par a..b correspondente
 
 # table patcher
 #
-# |file_name_hash |  par_a_b  |     patch    |   apply_at   |  compare_at  |
-# | ------------- | --------- | ------------ | ------------ | ------------ |
-# |     23bbd     | main_cead | "diff --git" | 13:02 28/23  | 12:01 28/23  |
+# |  file_name_hash |   repo_url |   par_a_b  |     patch    |   apply_at   |  compare_at  |
+# | --------------- | -----------| ---------- | ------------ | ------------ | ------------ |
+# |     '23bbd'     | 'https://' |'main_cead' | 'diff --git' | 13:02 28/23  | 12:01 28/23  |
 
 # permito apagar alguma linha de patch criada
 
@@ -22,7 +24,8 @@ class GitManager:
         Permite criar um banco de patches para aplicar em branches
     """
     files: list
-    def __init__(self, a:str, b:str, ignore:list):
+
+    def __init__(self, a: str, b: str, ignore: list):
         self.a = a
         self.b = b
         self.ignore = ignore
@@ -34,20 +37,23 @@ class GitManager:
         print('git branch -r')
 
     def get_file_diffs(self):
-        print('git diff origin/a..origin/b -- name/file.txt')
+        print('git diff origin/a..origin/b -- this/file.txt')
+
+    def get_files_diff(self):
+        print("git diff origin/a..origin/b --name-only")
 
     def apply_patch(self):
-        print('''git apply to/file.patch''')
+        print("git checkout a")
+        print("git apply the/filehashname.patch")
 
     def save_patch(self):
         print('''INSERT INTO 
-                        patcher(file_name_hash,par_a_b,patch,apply_date,compare_date) 
+                        patcher(file_name_hash,par_a_b,patch,apply_at,compare_at) 
                     VALUES ('23bbd', 'main_cead', 'diff --git', 13:02 28/23, 12:01 28/23);
               ''')
 
     def delete_patch(self):
-        print("DELETE FROM patcher WHERE file_name_hash = '23bbd' ")
+        print("DELETE FROM patcher WHERE file_name_hash = '23bbd';")
 
     def update_patch(self):
         print('UPDATE patcher SET file_name_hash = "a8s56", patch = "diff --git..";')
-    
