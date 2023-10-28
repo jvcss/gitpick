@@ -6,6 +6,34 @@ param(
 $ignore = @(
     ".gitignore"
 )
+
+# BAIXA O REPO
+function Get-Repository {
+    param (
+        [string]$URL,
+        [string]$OutputFolder = "source"
+    )
+
+    if (-not (Test-Path ".\${$OutputFolder}")) {
+        git clone $URL $OutputFolder
+    }
+    else {
+        Write-Host "Project folder Already Exist" -ForegroundColor Cyan
+    }
+}
+
+# PEGO AS BRANCHES
+function Get-Branches {
+    param(
+        [string]$BaseA = "main"
+    )
+    $branchesRemote = git branch -r | ForEach-Object {
+        $_ -replace 'origin/', ''
+    } | Where-Object { $_ -notmatch 'HEAD' } | Where-Object { $_ -notmatch $BaseA } | ForEach-Object { $_.Trim() }
+
+    return $branchesRemote
+}
+
 #🔥
 function Get-ContentDiffReverse {
     param (
@@ -18,17 +46,7 @@ function Get-ContentDiffReverse {
 
     return $difference
 }
-#🔥
-function Get-Branches {
-    param(
-        [string]$BaseA = "main"
-    )
-    $branchesRemote = git branch -r | ForEach-Object {
-        $_ -replace 'origin/', ''
-    } | Where-Object { $_ -notmatch 'HEAD' } | Where-Object { $_ -notmatch $BaseA } | ForEach-Object { $_.Trim() }
 
-    return $branchesRemote
-}
 #🔥
 function Get-FileDiffs {
     param(
@@ -166,20 +184,6 @@ function Set-ForceCheckout {
     Start-Sleep -Seconds 1
     git branch --set-upstream-to=origin/$Branch $Branch
     Write-Host "Forced Checkout to [${$Branch}]" -ForegroundColor Yellow
-}
-#🔥
-function Get-Repository {
-    param (
-        [string]$URL,
-        [string]$OutputFolder = "source"
-    )
-
-    if (-not (Test-Path ".\${$OutputFolder}")) {
-        git clone $URL $OutputFolder
-    }
-    else {
-        Write-Host "Project folder Already Exist" -ForegroundColor Cyan
-    }
 }
 
 Get-Repository -URL $RepoURL -OutputFolder $DiretorioDestino
