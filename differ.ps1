@@ -188,15 +188,15 @@ Get-Repository -URL $RepoURL -OutputFolder $DiretorioDestino
 
 Push-Location $DiretorioDestino
 
-# $contentDiffers = Get-ContentDiff -File "smart/android/app/src/main/kotlin/comercial/terasmart/terabytesolucoes/com/br/smart/MainActivity.kt" -Branch "cead"
-# Save-Diffs -Content $contentDiffers -File "smart/android/app/src/main/kotlin/comercial/terasmart/terabytesolucoes/com/br/smart/MainActivity.kt" -Branch "cead"
+# $contentDiffers = Get-ContentDiff -File "smart/android/app/src/main/kotlin/br/com/app/MainActivity.kt" -Branch "cead"
+# Save-Diffs -Content $contentDiffers -File "smart/android/app/src/main/kotlin/br/com/app/MainActivity.kt" -Branch "cead"
 $branches = Get-Branches
 Set-Checkout -Branches $branches
 foreach ($branch in $branches) {
     $fileDiffers = Get-FileDiffs -branch $branch
     foreach ($file in $fileDiffers) {
         $contentDiffers = Get-ContentDiff -File $file -Branch $branch
-                
+        # apply patches automatically
         Save-Diffs -Content $contentDiffers -File $file -Branch $branch
     }
 }
